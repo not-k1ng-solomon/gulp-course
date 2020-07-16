@@ -1,13 +1,17 @@
 {
   "name": "gulp-course",
   "version": "1.0.0",
-  "description": "",
+  "description": "прохождения курса по gulp",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "",
   "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/not-k1ng-solomon/gulp-course"
+  },
   "dependencies": {
     "gulp-less": "^4.0.1"
   },

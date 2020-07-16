@@ -7,11 +7,14 @@ const cleanCss = require('gulp-clean-css');
 const gulpIf = require('gulp-if');
 const debug = require('gulp-debug');
 
+const browserSync = require('browser-sync');
+
 const isDevelopment = true;
+const debugInfo = false;
 
 gulp.task('less',()=>{
     return gulp.src('src/less/**/*.less')
-        // .pipe(debug({title:'src'}))
+        .pipe(gulpIf(debugInfo,debug({title:'src'})))
         .pipe(gulpIf(isDevelopment,sourcemaps.init()))
         .pipe(autoprefixer({
             overrideBrowserslist: ['last 16 versions'],
@@ -21,7 +24,8 @@ gulp.task('less',()=>{
         .pipe(concat('bundle.css'))
         .pipe(cleanCss())
         .pipe(gulpIf(isDevelopment,sourcemaps.write()))
-        .pipe(gulp.dest('tmp'));
+        .pipe(gulp.dest('tmp'))
+        .pipe(browserSync.stream());
 });
 
 gulp.task('html-main',()=>{
@@ -29,10 +33,18 @@ gulp.task('html-main',()=>{
         .pipe(gulp.dest('tmp'));
 });
 
-gulp.task('watch:less',()=>{
+gulp.task('serve',()=>{
+    browserSync.init({
+        server:{
+            baseDir:'./tmp'
+        }
+    });
     gulp.watch('src/less/**/*.less',gulp.series('less'));
+    gulp.watch('src/*.html').on('change',browserSync.reload);
+
 });
-gulp.task('default',gulp.parallel('less','html-main','watch:less'));
+
+gulp.task('default',gulp.series('less','html-main','serve'));
 
 //Урок 1
 /*
